@@ -6,7 +6,7 @@ class Counter extends Component {
   render() {
     return (
       <Grid centered>
-        <Grid.Column width={13} textAlign='center'>
+        <Grid.Column textAlign='center'>
           <Header
             as='h1'
             textAlign='center'
