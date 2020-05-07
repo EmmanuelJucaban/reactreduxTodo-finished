@@ -16,6 +16,4 @@ const TodoSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
-const Todo = model('Todo', TodoSchema);
-
-module.exports = Todo;
+module.exports = model('Todo', TodoSchema);

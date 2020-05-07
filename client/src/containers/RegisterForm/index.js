@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form, Segment, Button, Message } from 'semantic-ui-react';
+import { Form, Segment, Button } from 'semantic-ui-react';
 import { email, length, required } from 'redux-form-validators';
-
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { signUp } from '../../actions/auth';
 
 class RegisterForm extends Component {
+
+  onSubmit = formProps => {
+    console.log(formProps);
+    this.props.signUp(formProps, () => {
+      this.props.history.push('/counter');
+    });
+  }
 
   renderEmail({ input, meta }){
     return (
@@ -40,9 +49,9 @@ class RegisterForm extends Component {
 
   render() {
     console.log(this.props);
-    const { invalid, submitting, submitFailed } = this.props
+    const { invalid, submitting, submitFailed, handleSubmit } = this.props
     return (
-      <Form size='large'>
+      <Form size='large' onSubmit={handleSubmit(this.onSubmit)}>
         <Segment stacked>
           <Field
             name='email'
@@ -63,7 +72,7 @@ class RegisterForm extends Component {
               ]
             }/>
           <Button color='teal' fluid size='large' disabled={ invalid || submitting || submitFailed} >
-            Login
+            Sign Up
           </Button>
         </Segment>
       </Form>
@@ -72,4 +81,4 @@ class RegisterForm extends Component {
 }
 
 
-export default reduxForm({ form: 'Signup' })(RegisterForm);
+export default connect(null, { signUp })(reduxForm({ form: 'Signup' })(RegisterForm));
