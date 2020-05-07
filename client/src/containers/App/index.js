@@ -14,7 +14,7 @@ class App extends Component {
         <Grid.Column  textAlign='center' style={{ maxWidth: 600 }}>
           <Navbar/>
           <Route exact path='/counter' component={Counter}/>
-
+          <Route exact path='/' component={RegisterForm}/>
         </Grid.Column>
       </Grid>
     );
