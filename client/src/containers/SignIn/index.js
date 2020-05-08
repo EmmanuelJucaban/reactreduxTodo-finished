@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import { Form, Segment, Button } from 'semantic-ui-react';
 import { email, required } from 'redux-form-validators';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import axios from 'axios';
-
-
-
 
 
 class SignIn extends Component {

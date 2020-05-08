@@ -2,26 +2,29 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Segment, Button } from 'semantic-ui-react';
 import { email, length, required } from 'redux-form-validators';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { signUp } from '../../actions/auth';
-
-
+import axios from 'axios';
+import { AUTH_USER, AUTH_ERROR } from '../../actions/types';
 
 class SignUp extends Component {
-
-  onSignUp = formProps => {
-    this.props.signUp(formProps, () => {
+  onSubmit = async (formProps, dispatch) => {
+    console.log("I am form props", formProps);
+    try {
+      const { data } = await axios.post('/api/auth/signup', formProps);
+      localStorage.setItem('token', data.token);
+      dispatch({ type: AUTH_USER, payload: data.token });
       this.props.history.push('/counter');
-    });
+    } catch (e) {
+      dispatch({ type: AUTH_ERROR, payload: e });
+    }
   }
 
-  renderEmail({ input, meta, authError }){
+  renderEmail({ input, meta }){
+    console.log(meta);
     return (
         <Form.Input
           {...input}
           pointing='below'
-          error={ authError || (meta.touched && meta.error)}
+          error={ (meta.touched && meta.error) }
           fluid
           icon='user'
           iconPosition='left'
@@ -35,7 +38,7 @@ class SignUp extends Component {
     return (
       <Form.Input
         {...input}
-        error={meta.touched && meta.error }
+        error={ meta.touched && meta.error }
         type='password'
         fluid
         icon='lock'
@@ -47,23 +50,20 @@ class SignUp extends Component {
   }
 
   render() {
-    console.log(this.props);
-    const { invalid, submitting, submitFailed, handleSubmit, authError } = this.props
-    console.log(authError)
+    const { invalid, submitting, submitFailed, handleSubmit } = this.props
     return (
       <Form
         size='large'
-        onSubmit={ handleSubmit(this.onSignUp)}
-        error={!!authError}>
+        onSubmit={ handleSubmit(this.onSubmit)}>
         <Segment stacked>
           <Field
             name='email'
             component={this.renderEmail}
-            authError={authError}
+
             validate={
               [
-                required({msg: authError || 'Email is required'}),
-                email({msg: 'You must provide a valid email address'})
+                required({msg: 'Email is required' }),
+                email({msg: 'You must provide a valid email address' })
               ]
             }/>
           <Field
@@ -79,7 +79,7 @@ class SignUp extends Component {
             content='Sign Up'
             color='teal'
             fluid size='large'
-            disabled={ invalid || submitting || submitFailed || !!authError}
+            disabled={ invalid || submitting || submitFailed }
           />
         </Segment>
       </Form>
@@ -87,13 +87,20 @@ class SignUp extends Component {
   }
 }
 
-function mapStateToProps({auth: { authenticated, authError }}) {
-  return { authenticated, authError };
+const asyncValidate = async ({ email }) => {
+  console.log(email)
+  try {
+    const { data } = await axios.post(`/api/user/email`, { email });
+    console.log(data);
+  } catch (e) {
+    throw { email: 'Email already exists'}
+  }
 }
 
-export default compose(
-  reduxForm({ form: 'Signup' }),
-  connect(mapStateToProps, { signUp })
-)(SignUp);
+export default reduxForm({
+  form: 'SignUp',
+  asyncValidate,
+  asyncChangeFields: ['email']
+})(SignUp);
 
 
