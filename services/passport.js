@@ -17,10 +17,11 @@ const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
   // See if the user ID in the payload exists in our database
   //  If it does, call 'done' with that user
   //  otherwise, call done without a user object
+  // console.log("lalala")
   try {
-    const user = await User.findById(payload.sub).select('-password');
+    const user = await User.findById(payload.sub);
     if (!user) {
-      return done(null, false);
+      return done(null, false, 'You must be signed in');
     }
     return done(null, user);
   } catch (e) {
@@ -38,7 +39,7 @@ const localOptions = { usernameField: 'email' };
 const localLogin = new LocalStrategy(localOptions, async (email, password, done) => {
   try {
     // See if there's a user with this email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('password');
     // If no user with this email, we pass null as there's no error
     // We pass false as a 2nd arg because we didn't find a user
     if (!user) { return done(null, false); }

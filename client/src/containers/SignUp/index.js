@@ -6,29 +6,28 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { signUp } from '../../actions/auth';
 
-class RegisterForm extends Component {
 
-  onSubmit = formProps => {
-    console.log(formProps);
+
+class SignUp extends Component {
+
+  onSignUp = formProps => {
     this.props.signUp(formProps, () => {
       this.props.history.push('/counter');
     });
   }
 
-  renderEmail({ input, meta }){
+  renderEmail({ input, meta, authError }){
     return (
-      <>
         <Form.Input
           {...input}
           pointing='below'
-          error={meta.touched && meta.error}
+          error={ authError || (meta.touched && meta.error)}
           fluid
           icon='user'
           iconPosition='left'
           autoComplete='off'
           placeholder='E-mail Address'
         />
-      </>
     );
   };
 
@@ -36,7 +35,7 @@ class RegisterForm extends Component {
     return (
       <Form.Input
         {...input}
-        error={meta.touched && meta.error}
+        error={meta.touched && meta.error }
         type='password'
         fluid
         icon='lock'
@@ -49,16 +48,21 @@ class RegisterForm extends Component {
 
   render() {
     console.log(this.props);
-    const { invalid, submitting, submitFailed, handleSubmit } = this.props
+    const { invalid, submitting, submitFailed, handleSubmit, authError } = this.props
+    console.log(authError)
     return (
-      <Form size='large' onSubmit={handleSubmit(this.onSubmit)}>
+      <Form
+        size='large'
+        onSubmit={ handleSubmit(this.onSignUp)}
+        error={!!authError}>
         <Segment stacked>
           <Field
             name='email'
             component={this.renderEmail}
+            authError={authError}
             validate={
               [
-                required({msg: 'Email is required'}),
+                required({msg: authError || 'Email is required'}),
                 email({msg: 'You must provide a valid email address'})
               ]
             }/>
@@ -71,14 +75,25 @@ class RegisterForm extends Component {
                 length({ minimum: 6, msg: 'Your password must at least be 6 characters long' })
               ]
             }/>
-          <Button color='teal' fluid size='large' disabled={ invalid || submitting || submitFailed} >
-            Sign Up
-          </Button>
+          <Button
+            content='Sign Up'
+            color='teal'
+            fluid size='large'
+            disabled={ invalid || submitting || submitFailed || !!authError}
+          />
         </Segment>
       </Form>
     );
   }
 }
 
+function mapStateToProps({auth: { authenticated, authError }}) {
+  return { authenticated, authError };
+}
 
-export default connect(null, { signUp })(reduxForm({ form: 'Signup' })(RegisterForm));
+export default compose(
+  reduxForm({ form: 'Signup' }),
+  connect(mapStateToProps, { signUp })
+)(SignUp);
+
+

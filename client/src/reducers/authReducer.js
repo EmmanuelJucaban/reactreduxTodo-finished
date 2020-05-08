@@ -9,9 +9,10 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case AUTH_USER:
-      return {...state, authenticated: action.payload };
+      // If everything went well, we set the authError back to nothing
+      return {...state, authenticated: action.payload, authError: '' };
     case AUTH_ERROR:
-      return {...state, authenticated: action.payload };
+      return {...state, authError: action.payload };
     default:
       return state;
   }
