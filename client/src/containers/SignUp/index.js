@@ -6,8 +6,8 @@ import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from '../../actions/types';
 
 class SignUp extends Component {
+
   onSubmit = async (formProps, dispatch) => {
-    console.log("I am form props", formProps);
     try {
       const { data } = await axios.post('/api/auth/signup', formProps);
       localStorage.setItem('token', data.token);
@@ -88,12 +88,16 @@ class SignUp extends Component {
 }
 
 const asyncValidate = async ({ email }) => {
-  console.log(email)
   try {
-    const { data } = await axios.post(`/api/user/email`, { email });
+    const { data } = await axios.get('/api/user/email');
     console.log(data);
+    console.log(email)
+    const foundEmail = data.some(user => user.email === email);
+    if (foundEmail) {
+      throw { email: 'Email already exists' };
+    }
   } catch (e) {
-    throw { email: 'Email already exists'}
+    throw { email: 'Email already exists' };
   }
 }
 
@@ -102,5 +106,7 @@ export default reduxForm({
   asyncValidate,
   asyncChangeFields: ['email']
 })(SignUp);
+
+
 
 
