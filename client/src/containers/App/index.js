@@ -14,7 +14,7 @@ class App extends Component {
   render () {
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-        <Grid.Column textAlign='center' style={{ maxWidth: 600 }}>
+        <Grid.Column textAlign='center' style={{ maxWidth: 700 }}>
           <Navbar/>
           <Switch>
             <Route exact path='/alltodos' component={AllTodosList}/>

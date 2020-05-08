@@ -1,31 +1,44 @@
 import React, { Component } from 'react';
-import { List } from 'semantic-ui-react';
+import { List, Header } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { getAllTodos } from '../../actions/allTodos';
+import moment from 'moment';
 
 class AllTodosList extends Component {
-  state = {
-    todos: [ 'hello', 'world', 'im','here']
+
+  componentDidMount() {
+    this.props.getAllTodos();
   }
 
   renderList = () => {
-     return this.state.todos.map((todo, index) => {
+    if (this.props.todos.length === 0) {
+      return <Header>No todos yet</Header>
+    } else {
+      return this.props.todos.map((todo)=> {
+        console.log(todo.text);
         return (
-          <List.Item  key={index} style={{ fontSize: '20px'}}>
+          <List.Item key={todo._id}>
             <List.Content>
-              <List.Header>{todo}</List.Header>
-              <List.Description as='a'>Updated 10 mins ago</List.Description>
+              <List.Header>{todo.text}</List.Header>
+              <List.Description as='a'>Created {moment(todo.dateCreated).fromNow()}</List.Description>
             </List.Content>
           </List.Item>
         );
       });
+    }
   }
 
   render() {
     return (
-      <List  divided relaxed size={'huge'}>
+      <List celled selection size={'huge'}>
         {this.renderList()}
       </List>
     );
   }
 }
 
-export default AllTodosList;
+function mapStateToProps({ todos: { todos, getAllTodosError }}) {
+  return { todos, getAllTodosError };
+}
+
+export default connect(mapStateToProps, { getAllTodos })(AllTodosList);
