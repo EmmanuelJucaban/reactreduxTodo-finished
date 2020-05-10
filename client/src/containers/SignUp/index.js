@@ -5,11 +5,12 @@ import { email, length, required } from 'redux-form-validators';
 import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from '../../actions/types';
 
-class SignUp extends Component {
 
-  onSubmit = async (formProps, dispatch) => {
+
+class SignUp extends Component {
+  onSubmit = async (formValues, dispatch) => {
     try {
-      const { data } = await axios.post('/api/auth/signup', formProps);
+      const { data } = await axios.post('/api/auth/signup', formValues);
       localStorage.setItem('token', data.token);
       dispatch({ type: AUTH_USER, payload: data.token });
       this.props.history.push('/counter');
@@ -59,7 +60,6 @@ class SignUp extends Component {
           <Field
             name='email'
             component={this.renderEmail}
-
             validate={
               [
                 required({msg: 'Email is required' }),
@@ -90,11 +90,9 @@ class SignUp extends Component {
 const asyncValidate = async ({ email }) => {
   try {
     const { data } = await axios.get('/api/user/email');
-    console.log(data);
-    console.log(email)
     const foundEmail = data.some(user => user.email === email);
     if (foundEmail) {
-      throw { email: 'Email already exists' };
+      throw new Error();
     }
   } catch (e) {
     throw { email: 'Email already exists' };
@@ -106,7 +104,3 @@ export default reduxForm({
   asyncValidate,
   asyncChangeFields: ['email']
 })(SignUp);
-
-
-
-

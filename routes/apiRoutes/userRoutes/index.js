@@ -4,7 +4,7 @@ const {
   getUserByEmail,
   updateTodoById,
   deleteUserTodoById,
-} = require('../../../controllers/userTodosController');
+} = require('../../../controllers/userController');
 const { requireAuth } = require('../../../middlewares/authMiddlewares');
 
 // /api/users

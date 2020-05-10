@@ -6,11 +6,12 @@ import axios from 'axios';
 
 
 class SignIn extends Component {
-  onSignIn = async (formProps, dispatch)  => {
+  onSignIn = async (formValues, dispatch)  => {
       try {
-        const {data} = await axios.post('/api/auth/signin', formProps);
+        const {data} = await axios.post('/api/auth/signin', formValues);
         localStorage.setItem('token', data.token);
         dispatch({ type: 'AUTH_USER', payload: data.token });
+        this.props.history.push('/counter');
       } catch (e) {
         throw new SubmissionError({
           email: 'Wrong email',
