@@ -20,12 +20,11 @@ class SignIn extends Component {
         });
       }
   }
-  renderEmail({ input, meta, authError }){
+  renderEmail({ input, meta }){
     return (
         <Form.Input
           {...input}
-          pointing='below'
-          error={ authError || (meta.touched && meta.error)}
+          error={meta.touched && meta.error}
           fluid
           icon='user'
           iconPosition='left'
@@ -34,7 +33,6 @@ class SignIn extends Component {
         />
     );
   };
-
   renderPassword({ input, meta }){
     return (
       <Form.Input
@@ -49,23 +47,19 @@ class SignIn extends Component {
       />
     )
   }
-
   render() {
-    console.log(this.props);
-    const { invalid, submitting, submitFailed, handleSubmit, authError } = this.props
+    const { invalid, submitting, submitFailed, handleSubmit } = this.props
     return (
       <Form
         size='large'
-        onSubmit={ handleSubmit(this.onSignIn)}
-        error={!!authError}>
+        onSubmit={ handleSubmit(this.onSignIn)}>
         <Segment stacked>
           <Field
             name='email'
             component={this.renderEmail}
-            authError={authError}
             validate={
               [
-                required({msg: authError || 'Email is required'}),
+                required({msg: 'Email is required'}),
                 email({msg: 'You must provide a valid email address'})
               ]
             }/>

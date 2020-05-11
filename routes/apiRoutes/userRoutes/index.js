@@ -4,12 +4,14 @@ const {
   getUserByEmail,
   updateTodoById,
   deleteUserTodoById,
+  addTodo
 } = require('../../../controllers/userController');
 const { requireAuth } = require('../../../middlewares/authMiddlewares');
 
 // /api/users
 router.route('/todos')
-  .get(requireAuth, getUserTodos);
+  .get(requireAuth, getUserTodos)
+  .post(requireAuth, addTodo);
 
 router.route('/email')
   .get(getUserByEmail);

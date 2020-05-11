@@ -4,9 +4,20 @@ import authReducer from './authReducer';
 import counterReducer from './counterReducer';
 import todosReducer from './todosReducer';
 
+import { ADD_TODOS_SUCCESS } from '../actions/types';
+
 export default combineReducers({
   counter: counterReducer,
-  form: formReducer,
   auth: authReducer,
-  todos: todosReducer
+  todos: todosReducer,
+  form: formReducer.plugin({
+    userTodos: (state, action) => {
+      switch (action.type) {
+        case ADD_TODOS_SUCCESS:
+          return undefined;
+        default:
+          return state;
+      }
+    }
+  }),
 });

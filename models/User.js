@@ -8,6 +8,8 @@ const UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
+    lowercase: true,
+    trim: true,
     validate: [isEmail, 'Please enter a valid email address'],
     required: [true, 'You must provide an email address'],
   },
@@ -26,12 +28,6 @@ const UserSchema = new Schema({
     ref: 'Todo',
   }],
 });
-
-UserSchema.methods.toJSON = function() {
-  var obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
 
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {

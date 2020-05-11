@@ -1,19 +1,33 @@
-import { GET_ALL_TODOS, GET_ALL_TODOS_ERROR } from '../actions/types';
+import {
+  GET_ALL_TODOS,
+  GET_ALL_TODOS_ERROR,
+  GET_USER_TODOS,
+  ADD_TODOS_ERROR,
+  ADD_TODOS_SUCCESS
+} from '../actions/types';
 
 const INITIAL_STATE = {
-  todos: [ {id: '', text: '', completed: '', dateCreated: ''} ],
-  userTodos: [ {id: '', text: '', completed: '', dateCreated: ''}],
   todo: { id: '', text: '', completed: ''},
-  getAllTodosError: ''
+  todos: [],
+  userTodos: [],
+  userTodosError: '',
+  getAllTodosError: '',
+  addTodosError: ''
 };
 
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_ALL_TODOS:
-      return {...state, todos: action.payload };
+      return {...state, todos: action.payload, getAllTodosError:'' };
     case GET_ALL_TODOS_ERROR:
       return {...state, todos: action.payload };
+    case GET_USER_TODOS:
+      return {...state, userTodos: action.payload,  userTodosError: '' };
+    case ADD_TODOS_SUCCESS:
+      return {...state, addTodosError: '' };
+    case ADD_TODOS_ERROR:
+      return {...state, addTodosError: action.payload };
     default:
       return state;
   }

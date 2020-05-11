@@ -14,13 +14,12 @@ class AllTodosList extends Component {
     if (this.props.todos.length === 0) {
       return <Header>No todos yet</Header>
     } else {
-      return this.props.todos.map((todo)=> {
-        console.log(todo.text);
+      return this.props.todos.map(({_id, text, dateCreated})=> {
         return (
-          <List.Item key={todo._id}>
+          <List.Item key={_id}>
             <List.Content>
-              <List.Header>{todo.text}</List.Header>
-              <List.Description as='a'>Created {moment(todo.dateCreated).fromNow()}</List.Description>
+              <List.Header>{text}</List.Header>
+              <List.Description as='a'>Created {moment(dateCreated).fromNow()}</List.Description>
             </List.Content>
           </List.Item>
         );
