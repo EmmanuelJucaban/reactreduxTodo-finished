@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Header, Form, Segment, Message, List, Pagination } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { getUserTodos } from '../../actions/userTodos';
 import { ADD_TODOS_ERROR, ADD_TODOS_SUCCESS } from '../../actions/types';
