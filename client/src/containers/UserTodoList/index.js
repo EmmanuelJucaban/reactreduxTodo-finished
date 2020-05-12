@@ -47,19 +47,11 @@ class UserTodoList extends Component {
   }
 
   handlePageChange = (event, data) => {
-    console.log(event.target);
-    // console.log(event.target);
-    console.log(data);
     this.setState({
       activePage: data.activePage,
       start: data.activePage === 1 ? 0 : data.activePage * 10 - 10,
       end: data.activePage * 10
     });
-    // if (event.target.type === 'nextItem') {
-    //   return this.setState({ activePage: parseInt(data.activePage) });
-    // }
-    // if (event.target.type === )
-
   }
 
   render() {
