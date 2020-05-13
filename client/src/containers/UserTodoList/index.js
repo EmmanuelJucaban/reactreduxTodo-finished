@@ -3,11 +3,12 @@ import { reduxForm, Field } from 'redux-form';
 import { Header, Form, Segment, Message, List, Pagination } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getUserTodos, updateCompleteUserTodoById } from '../../actions/userTodos';
+import { getUserTodos, updateCompleteUserTodoById, deleteTodoById } from '../../actions/userTodos';
 import { ADD_TODOS_ERROR, ADD_TODOS_SUCCESS } from '../../actions/types';
 import axios from 'axios';
 
 import UserTodoListItems from './UserTodoListItems';
+
 
 class UserTodoList extends Component {
   state = {
@@ -27,7 +28,6 @@ class UserTodoList extends Component {
   }
 
   componentDidMount() {
-    console.log("Component did mount");
     this.props.getUserTodos();
   }
 
@@ -66,10 +66,11 @@ class UserTodoList extends Component {
               component={this.renderAddTodo}
             />
         </Form>
-        <List animated divided>
+        <List animated divided selection>
           <UserTodoListItems
             todos={this.props.userTodos.slice(this.state.start, this.state.end)}
             handleComplete={this.props.updateCompleteUserTodoById}
+            handleDelete={this.props.deleteTodoById}
           />
         </List>
         { this.props.userTodos.length === 0 ?
@@ -93,6 +94,6 @@ function mapStateToProps({ todos: { userTodos, userTodosError, addTodosError }})
 }
 
 export default compose(
-  connect(mapStateToProps, { getUserTodos, updateCompleteUserTodoById }),
+  connect(mapStateToProps, { getUserTodos, updateCompleteUserTodoById, deleteTodoById }),
   reduxForm({ form: 'userTodos' })
 )(UserTodoList);
