@@ -8,9 +8,9 @@ export default (props) => {
   } else {
     return props.todos.map(({_id, completed, text}) => {
       return (
-          <List.Item key={_id} style={{ textDecoration: completed ? 'line-through' : 'none', fontSize: '20px'} }>
+          <List.Item key={_id} >
             <List.Content floated="left" as={Link} to={`/todos/$`}>
-              <p style={{ paddingTop: '5px', marginRight: '100px' }}>{text}</p>
+              <p style={{ textDecoration: completed ? 'line-through' : 'none', fontSize: '20px'}}>{text}</p>
             </List.Content>
             <List.Content   floated='right'>
               <Popup
@@ -25,7 +25,8 @@ export default (props) => {
                 content={
                   <Button
                     color='green'
-                    content='Are you sure this is done?'/>
+                    content='Are you sure this is done?'
+                    onClick={() => props.handleComplete(_id, completed, text)}/>
                 }
               />
             {/*  /!*<DeleteModal handleClick={this.handleDeleteClick} id={_id} text={text}/>*!/*/}

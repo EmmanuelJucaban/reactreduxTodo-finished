@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail, isLength } = require('validator');
 const bcrypt = require('bcryptjs');
-
 const { Schema, model } = mongoose;
-
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -28,8 +26,6 @@ const UserSchema = new Schema({
     ref: 'Todo',
   }],
 });
-
-
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   const user = this;
   try {
@@ -39,11 +35,9 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
     return Promise.reject(e);
   }
 };
-
 UserSchema.pre('save', async function (next) {
   // gets access to the user model that is currently being saved
   const user = this;
-
   if (user.isModified('password')) {
     try {
       const salt = await bcrypt.genSalt();
@@ -57,5 +51,4 @@ UserSchema.pre('save', async function (next) {
     next();
   }
 });
-
 module.exports = model('User', UserSchema);

@@ -3,7 +3,7 @@ import { reduxForm, Field } from 'redux-form';
 import { Header, Form, Segment, Message, List, Pagination } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getUserTodos } from '../../actions/userTodos';
+import { getUserTodos, updateCompleteUserTodoById } from '../../actions/userTodos';
 import { ADD_TODOS_ERROR, ADD_TODOS_SUCCESS } from '../../actions/types';
 import axios from 'axios';
 
@@ -61,21 +61,24 @@ class UserTodoList extends Component {
       <>
         <Header as="h2" color="teal" textAlign="center">Welcome to the todo app!</Header>
         <Form size="large" onSubmit={handleSubmit(this.onSubmit)} error={!!this.props.addTodosError}>
-          <Segment stacked>
             <Field
               name="text"
               component={this.renderAddTodo}
             />
-          </Segment>
         </Form>
         <List animated divided>
-          <UserTodoListItems todos={this.props.userTodos.slice(this.state.start, this.state.end)}/>
+          <UserTodoListItems
+            todos={this.props.userTodos.slice(this.state.start, this.state.end)}
+            handleComplete={this.props.updateCompleteUserTodoById}
+          />
         </List>
-        <Pagination
+        { this.props.userTodos.length === 0 ?
+          null
+          : <Pagination
           totalPages={Math.ceil(this.props.userTodos.length / 10) }
           onPageChange={ (e, data) => this.handlePageChange(e, data)}
-          activePage={this.state.activePage}
-        />
+          activePage={this.state.activePage}/>
+        }
       </>
     );
   }
@@ -90,6 +93,6 @@ function mapStateToProps({ todos: { userTodos, userTodosError, addTodosError }})
 }
 
 export default compose(
-  connect(mapStateToProps, { getUserTodos }),
+  connect(mapStateToProps, { getUserTodos, updateCompleteUserTodoById }),
   reduxForm({ form: 'userTodos' })
 )(UserTodoList);
