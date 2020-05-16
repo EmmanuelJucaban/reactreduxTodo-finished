@@ -17,7 +17,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
   // See if the user ID in the payload exists in our database
   //  If it does, call 'done' with that user
   //  otherwise, call done without a user object
-  // console.log("lalala")
   try {
     const user = await User.findById(payload.sub);
     if (!user) {

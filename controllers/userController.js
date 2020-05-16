@@ -12,7 +12,7 @@ module.exports = {
       return res.status(403).json({ e });
     }
   },
-  addTodo: async (req, res) => {z
+  addTodo: async (req, res) => {
     const { text } = req.body;
     if (!text) {
       return res.status(403).json({ error: 'You must provide a text '});

@@ -59,6 +59,7 @@ class UserTodoList extends Component {
     console.log(this.state);
     return (
       <>
+        <p>{this.props.counter}</p>
         <Header as="h2" color="teal" textAlign="center">Welcome to the todo app!</Header>
         <Form size="large" onSubmit={handleSubmit(this.onSubmit)} error={!!this.props.addTodosError}>
             <Field
@@ -85,11 +86,12 @@ class UserTodoList extends Component {
   }
 }
 
-function mapStateToProps({ todos: { userTodos, userTodosError, addTodosError }}) {
+function mapStateToProps({ counter, todos: { userTodos, userTodosError, addTodosError }} ) {
   return {
     userTodos,
     userTodosError,
-    addTodosError
+    addTodosError,
+    counter,
   };
 }
 

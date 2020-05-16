@@ -10,7 +10,7 @@ import App from './containers/App';
 import reducers from './reducers';
 
 // Sets up redux devtools
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({trace: true}) || compose;
 
 // Takes 3 parameters.
 // 1st is Our combined reducers. Root index.js file in reducers folder
